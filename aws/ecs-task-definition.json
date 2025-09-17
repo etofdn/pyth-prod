@@ -1,0 +1,176 @@
+{
+  "family": "oracle-keeper-production",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "1024",
+  "memory": "2048",
+  "executionRoleArn": "arn:aws:iam::ACCOUNT_ID:role/ecsTaskExecutionRole",
+  "taskRoleArn": "arn:aws:iam::ACCOUNT_ID:role/oracleKeeperTaskRole",
+  "containerDefinitions": [
+    {
+      "name": "oracle-keeper-primary",
+      "image": "ACCOUNT_ID.dkr.ecr.REGION.amazonaws.com/oracle-keeper:latest",
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 3000,
+          "protocol": "tcp"
+        }
+      ],
+      "environment": [
+        {
+          "name": "NODE_ENV",
+          "value": "production"
+        },
+        {
+          "name": "KEEPER_ROLE",
+          "value": "primary"
+        },
+        {
+          "name": "INSTANCE_ID",
+          "value": "fargate-primary-001"
+        }
+      ],
+      "secrets": [
+        {
+          "name": "RPC_URL",
+          "valueFrom": "arn:aws:secretsmanager:REGION:ACCOUNT_ID:secret:oracle-keeper/rpc-url"
+        },
+        {
+          "name": "PRIVATE_KEY",
+          "valueFrom": "arn:aws:secretsmanager:REGION:ACCOUNT_ID:secret:oracle-keeper/private-key"
+        },
+        {
+          "name": "REDIS_PASSWORD",
+          "valueFrom": "arn:aws:secretsmanager:REGION:ACCOUNT_ID:secret:oracle-keeper/redis-password"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/oracle-keeper",
+          "awslogs-region": "REGION",
+          "awslogs-stream-prefix": "primary"
+        }
+      },
+      "healthCheck": {
+        "command": ["CMD-SHELL", "node /app/healthcheck.js"],
+        "interval": 30,
+        "timeout": 10,
+        "retries": 3,
+        "startPeriod": 40
+      },
+      "cpu": 512,
+      "memory": 1024,
+      "memoryReservation": 512
+    },
+    {
+      "name": "oracle-keeper-backup",
+      "image": "ACCOUNT_ID.dkr.ecr.REGION.amazonaws.com/oracle-keeper:latest",
+      "essential": false,
+      "portMappings": [
+        {
+          "containerPort": 3000,
+          "protocol": "tcp"
+        }
+      ],
+      "environment": [
+        {
+          "name": "NODE_ENV",
+          "value": "production"
+        },
+        {
+          "name": "KEEPER_ROLE",
+          "value": "backup"
+        },
+        {
+          "name": "INSTANCE_ID",
+          "value": "fargate-backup-001"
+        },
+        {
+          "name": "UPDATE_DELAY",
+          "value": "10000"
+        }
+      ],
+      "secrets": [
+        {
+          "name": "RPC_URL",
+          "valueFrom": "arn:aws:secretsmanager:REGION:ACCOUNT_ID:secret:oracle-keeper/rpc-url"
+        },
+        {
+          "name": "PRIVATE_KEY",
+          "valueFrom": "arn:aws:secretsmanager:REGION:ACCOUNT_ID:secret:oracle-keeper/backup-private-key"
+        },
+        {
+          "name": "REDIS_PASSWORD",
+          "valueFrom": "arn:aws:secretsmanager:REGION:ACCOUNT_ID:secret:oracle-keeper/redis-password"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/oracle-keeper",
+          "awslogs-region": "REGION",
+          "awslogs-stream-prefix": "backup"
+        }
+      },
+      "healthCheck": {
+        "command": ["CMD-SHELL", "node /app/healthcheck.js"],
+        "interval": 30,
+        "timeout": 10,
+        "retries": 3,
+        "startPeriod": 40
+      },
+      "cpu": 256,
+      "memory": 512,
+      "memoryReservation": 256,
+      "dependsOn": [
+        {
+          "containerName": "oracle-keeper-primary",
+          "condition": "HEALTHY"
+        }
+      ]
+    },
+    {
+      "name": "redis",
+      "image": "redis:7-alpine",
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 6379,
+          "protocol": "tcp"
+        }
+      ],
+      "command": [
+        "redis-server",
+        "--appendonly",
+        "yes",
+        "--requirepass",
+        "${REDIS_PASSWORD}"
+      ],
+      "secrets": [
+        {
+          "name": "REDIS_PASSWORD",
+          "valueFrom": "arn:aws:secretsmanager:REGION:ACCOUNT_ID:secret:oracle-keeper/redis-password"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/oracle-keeper",
+          "awslogs-region": "REGION",
+          "awslogs-stream-prefix": "redis"
+        }
+      },
+      "healthCheck": {
+        "command": ["CMD-SHELL", "redis-cli --raw incr ping"],
+        "interval": 30,
+        "timeout": 10,
+        "retries": 3
+      },
+      "cpu": 256,
+      "memory": 512,
+      "memoryReservation": 256
+    }
+  ]
+}

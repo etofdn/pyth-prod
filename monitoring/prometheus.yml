@@ -1,0 +1,43 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  - "alert_rules.yml"
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: []
+
+scrape_configs:
+  # Oracle Keeper Metrics
+  - job_name: 'oracle-keeper-primary'
+    static_configs:
+      - targets: ['oracle-keeper-primary:3000']
+    scrape_interval: 5s
+    metrics_path: /metrics
+
+  - job_name: 'oracle-keeper-backup'
+    static_configs:
+      - targets: ['oracle-keeper-backup:3000']
+    scrape_interval: 5s
+    metrics_path: /metrics
+
+  # System Metrics
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['node-exporter:9100']
+    scrape_interval: 10s
+
+  # Redis Metrics
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['redis:6379']
+    scrape_interval: 10s
+
+  # Container Metrics
+  - job_name: 'docker'
+    static_configs:
+      - targets: ['localhost:9323']
+    scrape_interval: 10s

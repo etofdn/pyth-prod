@@ -1,0 +1,14 @@
+[profile.default]
+src = "src"
+out = "out"
+libs = ["lib"]
+
+# RPC URLs
+[rpc_endpoints]
+eto_testnet = "${RPC_URL}"
+
+# Etherscan config for verification
+[etherscan]
+eto_testnet = { key = "${SNOWTRACE_API_KEY}", url = "https://testnet.snowtrace.io/api" }
+
+# See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
