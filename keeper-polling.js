@@ -18,8 +18,9 @@ class BattleProofKeeperPolling {
         this.priceIds = [
             "0x78a3e3b8e676a8f73c439f5d749737034b139bbbe899ba5775216fba596607fe", // META/USD
             "0x49f6b65cb1de6b10eaf75e7c03ca029c306d0357e91b5311b175084a5ad55688", // AAPL/USD
-            "0xb5d0e0fa58a1f8b81498ae670ce93c872d14434b72c364885d4fa1b257cbb07a", // AMZN/USD (corrected)
-            "0xe65ff435be42630439c96396653a342829e877e2aafaeaf1a10d0ee5fd2cf3f2"  // GOOG/USD (working feed)
+            "0xb5d0e0fa58a1f8b81498ae670ce93c872d14434b72c364885d4fa1b257cbb07a", // AMZN/USD
+            "0xb1073854ed24cbc755dc527418f52b7d271f6cc967bbf8d8129112b18860a593", // NVDA/USD
+            "0x5a48c03e9b9cb337801073ed9d166817473697efff0d138874e0f6a33d6d5aa6"  // GOOGL/USD
         ];
 
         this.maxRetries = 5;
@@ -126,7 +127,8 @@ class BattleProofKeeperPolling {
             '78a3e3b8e676a8f73c439f5d749737034b139bbbe899ba5775216fba596607fe': 'META',
             '49f6b65cb1de6b10eaf75e7c03ca029c306d0357e91b5311b175084a5ad55688': 'AAPL',
             'b5d0e0fa58a1f8b81498ae670ce93c872d14434b72c364885d4fa1b257cbb07a': 'AMZN',
-            'e65ff435be42630439c96396653a342829e877e2aafaeaf1a10d0ee5fd2cf3f2': 'GOOG'
+            'b1073854ed24cbc755dc527418f52b7d271f6cc967bbf8d8129112b18860a593': 'NVDA',
+            '5a48c03e9b9cb337801073ed9d166817473697efff0d138874e0f6a33d6d5aa6': 'GOOGL'
         };
         return symbols[id] || id.slice(0, 8);
     }
