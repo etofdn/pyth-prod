@@ -1,0 +1,16 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: pyth-keeper-monitor
+  namespace: default
+  labels:
+    app: pyth-keeper
+spec:
+  selector:
+    matchLabels:
+      app: pyth-keeper
+  endpoints:
+  - port: metrics
+    interval: 15s
+    path: /metrics
+    scheme: http

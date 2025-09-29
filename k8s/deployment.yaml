@@ -1,0 +1,182 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pyth-keeper
+  namespace: default
+  labels:
+    app: pyth-keeper
+    version: v2.0.0
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: pyth-keeper
+  template:
+    metadata:
+      labels:
+        app: pyth-keeper
+        version: v2.0.0
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+        prometheus.io/path: "/metrics"
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+      containers:
+      - name: pyth-keeper
+        image: pyth-keeper:v2.0.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 9090
+          name: metrics
+          protocol: TCP
+        env:
+        - name: NODE_ENV
+          value: "production"
+        - name: LOG_LEVEL
+          value: "info"
+        - name: PRIVATE_KEY
+          valueFrom:
+            secretKeyRef:
+              name: pyth-keeper-secrets
+              key: private-key
+        - name: RPC_URL
+          valueFrom:
+            configMapKeyRef:
+              name: pyth-keeper-config
+              key: rpc-url
+        - name: CONTRACT_ADDRESS
+          valueFrom:
+            configMapKeyRef:
+              name: pyth-keeper-config
+              key: contract-address
+        - name: DEBOUNCE_MS
+          valueFrom:
+            configMapKeyRef:
+              name: pyth-keeper-config
+              key: debounce-ms
+        - name: MAX_STALENESS
+          valueFrom:
+            configMapKeyRef:
+              name: pyth-keeper-config
+              key: max-staleness
+        - name: RETRY_ATTEMPTS
+          valueFrom:
+            configMapKeyRef:
+              name: pyth-keeper-config
+              key: retry-attempts
+        - name: MIN_PRICE_CHANGE_PERCENT
+          valueFrom:
+            configMapKeyRef:
+              name: pyth-keeper-config
+              key: min-price-change-percent
+        - name: FORCE_UPDATE_INTERVAL_MS
+          valueFrom:
+            configMapKeyRef:
+              name: pyth-keeper-config
+              key: force-update-interval-ms
+        - name: METRICS_PORT
+          value: "9090"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 9090
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+          successThreshold: 1
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 9090
+          initialDelaySeconds: 40
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+          successThreshold: 1
+        startupProbe:
+          httpGet:
+            path: /health
+            port: 9090
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 10
+          successThreshold: 1
+        volumeMounts:
+        - name: logs
+          mountPath: /app/logs
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: false
+          capabilities:
+            drop:
+            - ALL
+      volumes:
+      - name: logs
+        emptyDir: {}
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pyth-keeper-service
+  namespace: default
+  labels:
+    app: pyth-keeper
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9090"
+spec:
+  type: ClusterIP
+  ports:
+  - port: 9090
+    targetPort: 9090
+    protocol: TCP
+    name: metrics
+  selector:
+    app: pyth-keeper
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pyth-keeper-config
+  namespace: default
+data:
+  rpc-url: "wss://testnet-eto-y246d.avax-test.network/ext/bc/2hpQwDpDGEa4915WnAp6MP7qCcoP35jqUHFji7p3o9E99UBJmk/ws?token=da37bf16c0a88bb35f2e5c48bc8ce1229913fb135de21d7769a02b21f6c2b0ce"
+  contract-address: "0x36df4CF7cB10eD741Ed6EC553365cf515bc07121"
+  debounce-ms: "1000"
+  max-staleness: "30"
+  retry-attempts: "3"
+  min-price-change-percent: "0.01"
+  force-update-interval-ms: "300000"
+---
+# Secret should be created separately with:
+# kubectl create secret generic pyth-keeper-secrets --from-literal=private-key=YOUR_PRIVATE_KEY
+apiVersion: v1
+kind: Secret
+metadata:
+  name: pyth-keeper-secrets
+  namespace: default
+type: Opaque
+data:
+  # Base64 encoded private key - replace with actual value
+  private-key: WU9VUl9QUklWQVRFX0tFWV9IRVJF  # "YOUR_PRIVATE_KEY_HERE" in base64

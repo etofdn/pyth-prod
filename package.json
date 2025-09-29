@@ -18,6 +18,18 @@
     "@pythnetwork/pyth-sdk-solidity": "^4.2.0",
     "dotenv": "^17.2.2",
     "ethers": "^6.15.0",
-    "eventsource": "^4.0.0"
+    "eventsource": "^4.0.0",
+    "winston": "^3.11.0",
+    "prom-client": "^15.1.0",
+    "retry-axios": "^2.6.0",
+    "node-cron": "^3.0.3",
+    "express": "^4.18.2"
+  },
+  "scripts": {
+    "start": "node production-keeper-sse.js",
+    "dev": "node production-keeper-sse.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "docker:build": "docker build -t pyth-keeper .",
+    "docker:run": "docker run --env-file .env pyth-keeper"
   }
 }
