@@ -1,0 +1,230 @@
+<svg width="1400" height="900" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1E88E5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0D47A1;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="grad2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#66BB6A;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2E7D32;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="grad3" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFA726;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E65100;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Title -->
+  <text x="700" y="30" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#1a1a1a">
+    Pyth Oracle Multi-Region Production Deployment
+  </text>
+  
+  <!-- Region: us-east-1 (Primary) -->
+  <g id="region-us-east-1">
+    <rect x="50" y="60" width="400" height="750" rx="10" fill="#E3F2FD" stroke="#1976D2" stroke-width="2"/>
+    <text x="250" y="85" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="#1565C0">
+      Primary: us-east-1
+    </text>
+    
+    <!-- VPC -->
+    <rect x="70" y="110" width="360" height="680" rx="5" fill="#BBDEFB" stroke="#1976D2" stroke-width="2"/>
+    <text x="250" y="135" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#0D47A1">
+      VPC: 10.0.0.0/16
+    </text>
+    
+    <!-- Subnets -->
+    <rect x="90" y="155" width="160" height="80" rx="3" fill="#90CAF9" stroke="#1565C0" stroke-width="1"/>
+    <text x="170" y="175" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="#0D47A1">Public Subnet A</text>
+    <text x="170" y="190" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#424242">10.0.10.0/24</text>
+    <text x="170" y="205" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#424242">IGW Route</text>
+    
+    <rect x="260" y="155" width="160" height="80" rx="3" fill="#90CAF9" stroke="#1565C0" stroke-width="1"/>
+    <text x="340" y="175" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="#0D47A1">Public Subnet B</text>
+    <text x="340" y="190" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#424242">10.0.11.0/24</text>
+    <text x="340" y="205" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#424242">IGW Route</text>
+    
+    <rect x="90" y="250" width="160" height="100" rx="3" fill="#E1F5FE" stroke="#0277BD" stroke-width="1"/>
+    <text x="170" y="270" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="#01579B">Private Subnet A</text>
+    <text x="170" y="285" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#424242">10.0.1.0/24</text>
+    
+    <rect x="260" y="250" width="160" height="100" rx="3" fill="#E1F5FE" stroke="#0277BD" stroke-width="1"/>
+    <text x="340" y="270" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="#01579B">Private Subnet B</text>
+    <text x="340" y="285" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#424242">10.0.2.0/24</text>
+    
+    <!-- ECS Fargate Tasks -->
+    <rect x="90" y="370" width="150" height="80" rx="3" fill="url(#grad1)" stroke="#1565C0" stroke-width="2"/>
+    <text x="165" y="390" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="#fff">ECS Task 1</text>
+    <text x="165" y="405" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#fff">0.5 vCPU / 1GB</text>
+    <text x="165" y="420" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#fff">Port: 9090</text>
+    <text x="165" y="435" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#fff">Leader</text>
+    
+    <rect x="260" y="370" width="150" height="80" rx="3" fill="url(#grad1)" stroke="#1565C0" stroke-width="2"/>
+    <text x="335" y="390" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="#fff">ECS Task 2</text>
+    <text x="335" y="405" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#fff">0.5 vCPU / 1GB</text>
+    <text x="335" y="420" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#fff">Port: 9090</text>
+    <text x="335" y="435" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#fff">Standby</text>
+    
+    <!-- Aurora Database -->
+    <rect x="90" y="470" width="320" height="90" rx="3" fill="url(#grad2)" stroke="#2E7D32" stroke-width="2"/>
+    <text x="250" y="490" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#fff">Aurora Serverless v2</text>
+    <text x="250" y="505" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#fff">Primary Cluster</text>
+    <text x="250" y="520" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#fff">0.5-2 ACUs (auto-scale)</text>
+    <text x="250" y="535" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#fff">MySQL 8.0 | 7-day backups</text>
+    <text x="250" y="550" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#fff">Historical Prices &amp; TX Logs</text>
+    
+    <!-- Redis Cache -->
+    <rect x="90" y="580" width="320" height="80" rx="3" fill="url(#grad3)" stroke="#E65100" stroke-width="2"/>
+    <text x="250" y="600" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#fff">ElastiCache Redis</text>
+    <text x="250" y="615" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#fff">Global Datastore Primary</text>
+    <text x="250" y="630" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#fff">cache.t4g.micro (ARM)</text>
+    <text x="250" y="645" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#fff">Leader Election &amp; Nonce Pool</text>
+    
+    <!-- CloudWatch -->
+    <rect x="90" y="680" width="320" height="60" rx="3" fill="#FFF3E0" stroke="#F57C00" stroke-width="1"/>
+    <text x="250" y="700" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="#E65100">CloudWatch Monitoring</text>
+    <text x="250" y="715" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#5D4037">Logs | Metrics | Alarms | Dashboards</text>
+    <text x="250" y="730" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#5D4037">30-day retention</text>
+  </g>
+  
+  <!-- Region: us-west-2 (Standby) -->
+  <g id="region-us-west-2">
+    <rect x="500" y="60" width="400" height="750" rx="10" fill="#E8F5E9" stroke="#388E3C" stroke-width="2"/>
+    <text x="700" y="85" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="#2E7D32">
+      Standby: us-west-2
+    </text>
+    
+    <rect x="520" y="110" width="360" height="680" rx="5" fill="#C8E6C9" stroke="#388E3C" stroke-width="2"/>
+    <text x="700" y="135" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#1B5E20">
+      VPC: 10.1.0.0/16
+    </text>
+    
+    <!-- ECS Task -->
+    <rect x="600" y="370" width="200" height="80" rx="3" fill="url(#grad1)" stroke="#1565C0" stroke-width="2" opacity="0.8"/>
+    <text x="700" y="390" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="#fff">ECS Task 1</text>
+    <text x="700" y="405" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#fff">0.5 vCPU / 1GB</text>
+    <text x="700" y="420" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#fff">Standby Mode</text>
+    <text x="700" y="435" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#fff">Auto-Failover</text>
+    
+    <!-- Aurora Read Replica -->
+    <rect x="580" y="470" width="240" height="90" rx="3" fill="url(#grad2)" stroke="#2E7D32" stroke-width="2" opacity="0.8"/>
+    <text x="700" y="490" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#fff">Aurora Read Replica</text>
+    <text x="700" y="505" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#fff">Sub-second Replication</text>
+    <text x="700" y="520" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#fff">Auto-Promote on Failover</text>
+    <text x="700" y="535" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#fff">Global Database</text>
+    
+    <!-- Redis Replica -->
+    <rect x="580" y="580" width="240" height="80" rx="3" fill="url(#grad3)" stroke="#E65100" stroke-width="2" opacity="0.8"/>
+    <text x="700" y="600" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#fff">Redis Replica</text>
+    <text x="700" y="615" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#fff">Global Datastore Replica</text>
+    <text x="700" y="630" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#fff">State Sync</text>
+    
+    <!-- Route53 -->
+    <rect x="600" y="680" width="200" height="60" rx="3" fill="#FFF3E0" stroke="#F57C00" stroke-width="1"/>
+    <text x="700" y="700" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="#E65100">Route53 Health Checks</text>
+    <text x="700" y="715" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#5D4037">Global Failover</text>
+    <text x="700" y="730" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#5D4037">&lt; 60s failover</text>
+  </g>
+  
+  <!-- Region: eu-west-1 (Standby) -->
+  <g id="region-eu-west-1">
+    <rect x="950" y="60" width="400" height="750" rx="10" fill="#FFF3E0" stroke="#F57C00" stroke-width="2"/>
+    <text x="1150" y="85" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="#E65100">
+      Standby: eu-west-1
+    </text>
+    
+    <rect x="970" y="110" width="360" height="680" rx="5" fill="#FFE0B2" stroke="#F57C00" stroke-width="2"/>
+    <text x="1150" y="135" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#BF360C">
+      VPC: 10.2.0.0/16
+    </text>
+    
+    <!-- ECS Task -->
+    <rect x="1050" y="370" width="200" height="80" rx="3" fill="url(#grad1)" stroke="#1565C0" stroke-width="2" opacity="0.8"/>
+    <text x="1150" y="390" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="#fff">ECS Task 1</text>
+    <text x="1150" y="405" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#fff">0.5 vCPU / 1GB</text>
+    <text x="1150" y="420" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#fff">Standby Mode</text>
+    
+    <!-- Aurora Read Replica -->
+    <rect x="1030" y="470" width="240" height="90" rx="3" fill="url(#grad2)" stroke="#2E7D32" stroke-width="2" opacity="0.8"/>
+    <text x="1150" y="490" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#fff">Aurora Read Replica</text>
+    <text x="1150" y="505" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#fff">Global Database</text>
+    <text x="1150" y="520" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#fff">Read-Optimized</text>
+    
+    <!-- Redis Replica -->
+    <rect x="1030" y="580" width="240" height="80" rx="3" fill="url(#grad3)" stroke="#E65100" stroke-width="2" opacity="0.8"/>
+    <text x="1150" y="600" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#fff">Redis Replica</text>
+    <text x="1150" y="615" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#fff">Global Datastore</text>
+    
+    <!-- S3 Glacier -->
+    <rect x="1050" y="680" width="200" height="60" rx="3" fill="#FFF9C4" stroke="#F57F17" stroke-width="1"/>
+    <text x="1150" y="700" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="#F57F17">S3 + Glacier</text>
+    <text x="1150" y="715" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#5D4037">Long-term Archive</text>
+    <text x="1150" y="730" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#5D4037">1 year retention</text>
+  </g>
+  
+  <!-- Data Flow Arrows -->
+  <!-- Hermes API to Keepers -->
+  <path d="M 250 770 L 200 830 L 250 790" stroke="#1976D2" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="180" y="825" font-family="Arial, sans-serif" font-size="10" fill="#1976D2">SSE</text>
+  
+  <!-- Blockchain RPC -->
+  <path d="M 335 770 L 300 830 L 345 790" stroke="#9C27B0" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="290" y="825" font-family="Arial, sans-serif" font-size="10" fill="#9C27B0">RPC</text>
+  
+  <!-- Global Database Replication -->
+  <path d="M 410 515 L 500 515" stroke="#66BB6A" stroke-width="3" fill="none" stroke-dasharray="5,5"/>
+  <text x="455" y="510" font-family="Arial, sans-serif" font-size="10" fill="#2E7D32">Replication</text>
+  
+  <path d="M 820 515 L 950 515" stroke="#66BB6A" stroke-width="3" fill="none" stroke-dasharray="5,5"/>
+  
+  <!-- Redis Global Sync -->
+  <path d="M 410 620 L 500 620" stroke="#FFA726" stroke-width="3" fill="none" stroke-dasharray="5,5"/>
+  <text x="455" y="615" font-family="Arial, sans-serif" font-size="10" fill="#F57C00">Global Sync</text>
+  
+  <path d="M 820 620 L 950 620" stroke="#FFA726" stroke-width="3" fill="none" stroke-dasharray="5,5"/>
+  
+  <!-- Arrow marker definition -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#1976D2" />
+    </marker>
+  </defs>
+  
+  <!-- External Services -->
+  <g id="external-services">
+    <rect x="120" y="860" width="260" height="70" rx="5" fill="#F3E5F5" stroke="#7B1FA2" stroke-width="2"/>
+    <text x="250" y="880" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#6A1B9A">Hermes API</text>
+    <text x="250" y="900" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#4A148C">Pyth Network Price Feeds</text>
+    <text x="250" y="915" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#4A148C">Server-Sent Events (SSE)</text>
+    
+    <rect x="640" y="860" width="260" height="70" rx="5" fill="#E1BEE7" stroke="#7B1FA2" stroke-width="2"/>
+    <text x="770" y="880" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#6A1B9A">Blockchain RPC</text>
+    <text x="770" y="900" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#4A148C">ETO Testnet</text>
+    <text x="770" y="915" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#4A148C">WebSocket + HTTP</text>
+  </g>
+  
+  <!-- Cost Summary -->
+  <rect x="50" y="940" width="1300" height="100" rx="5" fill="#FAFAFA" stroke="#BDBDBD" stroke-width="1"/>
+  <text x="700" y="965" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#424242">
+    Estimated Monthly Cost: $127/month
+  </text>
+  <text x="150" y="990" font-family="Arial, sans-serif" font-size="11" fill="#424242">ECS Fargate Spot: $49</text>
+  <text x="150" y="1005" font-family="Arial, sans-serif" font-size="11" fill="#424242">Aurora Serverless: $30</text>
+  <text x="300" y="990" font-family="Arial, sans-serif" font-size="11" fill="#424242">ElastiCache: $15</text>
+  <text x="300" y="1005" font-family="Arial, sans-serif" font-size="11" fill="#424242">CloudWatch: $10</text>
+  <text x="450" y="990" font-family="Arial, sans-serif" font-size="11" fill="#424242">S3 + Glacier: $5</text>
+  <text x="450" y="1005" font-family="Arial, sans-serif" font-size="11" fill="#424242">Route53: $3</text>
+  <text x="600" y="990" font-family="Arial, sans-serif" font-size="11" fill="#424242">NAT Gateway: $15</text>
+  
+  <!-- Legend -->
+  <g id="legend">
+    <rect x="950" y="950" width="400" height="80" rx="3" fill="#E0E0E0" stroke="#757575" stroke-width="1"/>
+    <text x="1150" y="970" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#424242">Features</text>
+    <text x="1000" y="990" font-family="Arial, sans-serif" font-size="10" fill="#424242">• 99.9% uptime SLA</text>
+    <text x="1000" y="1005" font-family="Arial, sans-serif" font-size="10" fill="#424242">• Auto-failover &lt; 60s</text>
+    <text x="1150" y="990" font-family="Arial, sans-serif" font-size="10" fill="#424242">• Multi-AZ redundancy</text>
+    <text x="1150" y="1005" font-family="Arial, sans-serif" font-size="10" fill="#424242">• Global data replication</text>
+    <text x="1250" y="990" font-family="Arial, sans-serif" font-size="10" fill="#424242">• Leader election</text>
+    <text x="1250" y="1005" font-family="Arial, sans-serif" font-size="10" fill="#424242">• 90-day price history</text>
+  </g>
+</svg>
+
