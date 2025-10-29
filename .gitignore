@@ -1,14 +1,57 @@
-# Compiler files
-cache/
+# Dependencies
+node_modules/
+package-lock.json
+
+# Logs
+logs/
+*.log
+
+# Build artifacts
+dist/
+build/
 out/
 
-# Ignores development broadcast logs
-!/broadcast
-/broadcast/*/31337/
-/broadcast/**/dry-run/
+# Terraform
+terraform/.terraform/
+terraform/.terraform.lock.hcl
+terraform/*.tfstate
+terraform/*.tfstate.*
+terraform/*.tfvars
+terraform/.terraform.tfstate.lock.info
+.terraform/
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+*.tfvars
 
-# Docs
-docs/
-
-# Dotenv file
+# Environment files
 .env
+.env.local
+.env.production
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Broadcast (Foundry deployment outputs)
+broadcast/
+cache/
+
+# Security
+*.pem
+*.key
+secrets/
+
+# Docker
+*.tmp
+
+# Monitoring
+monitoring/grafana/provisioning/dashboards/*.json

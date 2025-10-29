@@ -7,6 +7,10 @@ const https = require("https");
 const cron = require("node-cron");
 require("dotenv").config();
 
+// Import multi-region components
+const StateManager = require("./src/keeper/StateManager");
+const AuroraClient = require("./src/db/AuroraClient");
+
 /**
  * @title ProductionKeeperSSE
  * @notice Production-ready keeper with SSE streaming for near-real-time updates
@@ -115,6 +119,18 @@ class ProductionKeeperSSE {
             warningCount: 0,
             rpcType: this.isWebSocketProvider ? "WebSocket" : "HTTP"
         };
+
+        // Multi-region state management
+        this.stateManager = new StateManager({
+            redisUrl: process.env.REDIS_URL,
+            region: process.env.REGION || "us-east-1"
+        });
+
+        // Database client for persistence
+        this.db = new AuroraClient({
+            host: process.env.AURORA_WRITER_ENDPOINT,
+            password: process.env.AURORA_PASSWORD
+        });
     }
 
     setupLogging() {
@@ -220,7 +236,12 @@ class ProductionKeeperSSE {
         this.logger.info("🚀 Starting Production Keeper with SSE streaming...");
 
         try {
-            // Initialize
+            // Initialize multi-region components
+            await this.stateManager.connect();
+            await this.db.connect();
+            await this.stateManager.tryBecomeLeader();
+            
+            // Initialize blockchain
             await this.refreshNonce();
 
             // Start services
@@ -236,7 +257,9 @@ class ProductionKeeperSSE {
             this.logger.info("✅ Production Keeper started successfully", {
                 debounceMs: this.debounceMs,
                 contractAddress: this.consumerContract.target,
-                walletAddress: this.wallet.address
+                walletAddress: this.wallet.address,
+                isLeader: this.stateManager.isLeader,
+                region: process.env.REGION
             });
 
         } catch (error) {
@@ -1332,6 +1355,15 @@ class ProductionKeeperSSE {
                     await new Promise(resolve => setTimeout(resolve, 1000));
                     waitTime += 1000;
                 }
+            }
+
+            // Disconnect multi-region components
+            if (this.stateManager) {
+                await this.stateManager.disconnect();
+            }
+            
+            if (this.db) {
+                await this.db.disconnect();
             }
 
             this.logger.info("✅ Graceful shutdown completed");
