@@ -17,7 +17,7 @@
   "dependencies": {
     "@pythnetwork/pyth-sdk-solidity": "^4.2.0",
     "dotenv": "^17.2.2",
-    "ethers": "^6.15.0",
+    "ethers": "^6.17.0",
     "eventsource": "^4.0.0",
     "winston": "^3.11.0",
     "prom-client": "^15.1.0",
